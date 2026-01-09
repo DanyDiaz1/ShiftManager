@@ -1,32 +1,56 @@
 package com.danidev.shiftmanager.security;
 
+
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Component;
 
-import java.nio.charset.StandardCharsets;
-import java.security.Key;
+import javax.crypto.SecretKey;
 import java.util.Date;
 
 @Component
 public class JwtUtil {
 
-    private static final String SECRET = "mi_clave_super_secreta_y_muy_larga_para_cumplir_con_los_256_bits";
+    // 🔐 clave segura (mínimo 256 bits)
+    private static final String SECRET =
+            "my-super-secret-key-my-super-secret-key-123456";
+
     private static final long EXPIRATION = 1000 * 60 * 60; // 1h
 
-    private Key getSigningKey() {
-        byte[] keyBytes = SECRET.getBytes(StandardCharsets.UTF_8);
-        return Keys.hmacShaKeyFor(keyBytes);
+    private SecretKey getSigningKey() {
+        return Keys.hmacShaKeyFor(SECRET.getBytes());
     }
 
     public String generateToken(String username) {
-
         return Jwts.builder()
-                .setSubject(username)
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION))
-                .signWith(getSigningKey(),SignatureAlgorithm.HS256)
+                .subject(username)
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + EXPIRATION))
+                .signWith(getSigningKey())
                 .compact();
+    }
+
+    public String extractUsername(String token) {
+        return getClaims(token).getSubject();
+    }
+
+    public boolean isTokenValid(String token) {
+        try {
+            getClaims(token);
+            System.out.println("JWT VALID");
+            return true;
+        } catch (Exception e) {
+            System.out.println("JWT INVALID: " + e.getMessage());
+            return false;
+        }
+    }
+
+    private Claims getClaims(String token) {
+        return Jwts.parser()
+                .verifyWith(getSigningKey()) // Reemplaza setSigningKey
+                .build()
+                .parseSignedClaims(token)    // Reemplaza parseClaimsJws
+                .getPayload();               // Reemplaza getBody
     }
 }
