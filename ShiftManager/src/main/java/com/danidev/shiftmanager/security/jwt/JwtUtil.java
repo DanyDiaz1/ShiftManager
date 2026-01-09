@@ -1,4 +1,4 @@
-package com.danidev.shiftmanager.security;
+package com.danidev.shiftmanager.security.jwt;
 
 
 import io.jsonwebtoken.Claims;

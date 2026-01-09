@@ -1,6 +1,7 @@
-package com.danidev.shiftmanager.security;
+package com.danidev.shiftmanager.security.config;
 
-import lombok.RequiredArgsConstructor;
+import com.danidev.shiftmanager.security.jwt.JwtAuthenticationEntryPoint;
+import com.danidev.shiftmanager.security.jwt.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;

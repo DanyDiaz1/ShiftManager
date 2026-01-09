@@ -1,8 +1,8 @@
-package com.danidev.shiftmanager.controller;
+package com.danidev.shiftmanager.user.controller;
 
-import com.danidev.shiftmanager.dto.LoginRequest;
-import com.danidev.shiftmanager.dto.LoginResponse;
-import com.danidev.shiftmanager.security.JwtUtil;
+import com.danidev.shiftmanager.user.dto.LoginRequest;
+import com.danidev.shiftmanager.user.dto.LoginResponse;
+import com.danidev.shiftmanager.security.jwt.JwtUtil;
 import jakarta.validation.Valid;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;

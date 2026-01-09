@@ -1,6 +1,6 @@
-package com.danidev.shiftmanager.repository;
+package com.danidev.shiftmanager.user.repository;
 
-import com.danidev.shiftmanager.entity.User;
+import com.danidev.shiftmanager.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

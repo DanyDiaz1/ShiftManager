@@ -1,12 +1,12 @@
-package com.danidev.shiftmanager.service.impl;
+package com.danidev.shiftmanager.user.service.impl;
 
-import com.danidev.shiftmanager.dto.UserCreateRequest;
-import com.danidev.shiftmanager.dto.UserResponse;
-import com.danidev.shiftmanager.entity.enums.Role;
-import com.danidev.shiftmanager.entity.User;
+import com.danidev.shiftmanager.user.dto.UserCreateRequest;
+import com.danidev.shiftmanager.user.dto.UserResponse;
+import com.danidev.shiftmanager.user.entity.enums.Role;
+import com.danidev.shiftmanager.user.entity.User;
 import com.danidev.shiftmanager.exception.BusinessException;
-import com.danidev.shiftmanager.repository.UserRepository;
-import com.danidev.shiftmanager.service.UserService;
+import com.danidev.shiftmanager.user.repository.UserRepository;
+import com.danidev.shiftmanager.user.service.UserService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 

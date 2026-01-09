@@ -1,4 +1,4 @@
-package com.danidev.shiftmanager.entity;
+package com.danidev.shiftmanager.user.entity;
 
 public class Service {
     private Long id;

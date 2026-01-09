@@ -1,7 +1,7 @@
-package com.danidev.shiftmanager.entity;
+package com.danidev.shiftmanager.user.entity;
 
 
-import com.danidev.shiftmanager.entity.enums.Status;
+import com.danidev.shiftmanager.user.entity.enums.Status;
 
 import java.time.LocalDateTime;
 

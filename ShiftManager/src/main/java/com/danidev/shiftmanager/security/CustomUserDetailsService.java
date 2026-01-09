@@ -1,7 +1,7 @@
 package com.danidev.shiftmanager.security;
 
-import com.danidev.shiftmanager.entity.User;
-import com.danidev.shiftmanager.repository.UserRepository;
+import com.danidev.shiftmanager.user.entity.User;
+import com.danidev.shiftmanager.user.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

@@ -1,13 +1,13 @@
-package com.danidev.shiftmanager.dto;
+package com.danidev.shiftmanager.user.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
-@Setter
-public class LoginRequest {
+public class UserCreateRequest {
+    @NotBlank
+    private String name;
 
     @Email
     @NotBlank

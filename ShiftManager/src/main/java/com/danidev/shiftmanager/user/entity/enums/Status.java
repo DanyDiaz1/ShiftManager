@@ -1,4 +1,4 @@
-package com.danidev.shiftmanager.entity.enums;
+package com.danidev.shiftmanager.user.entity.enums;
 
 public enum Status {
     PENDING,

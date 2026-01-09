@@ -1,4 +1,4 @@
-package com.danidev.shiftmanager.dto;
+package com.danidev.shiftmanager.user.dto;
 
 import lombok.Getter;
 import lombok.Setter;

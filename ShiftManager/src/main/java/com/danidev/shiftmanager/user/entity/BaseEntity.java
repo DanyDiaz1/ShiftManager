@@ -1,4 +1,4 @@
-package com.danidev.shiftmanager.entity;
+package com.danidev.shiftmanager.user.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
