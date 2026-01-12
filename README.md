@@ -1,142 +1,203 @@
-📄 ShiftManager – Backend API
-🧾 Description
+# ShiftManager API
 
-ShiftManager is a REST API developed with Java and Spring Boot for managing appointments in a hair salon.
-It allows managing users, services, and appointments while enforcing business rules such as time availability and date validations.
+ShiftManager is a backend REST API built with **Java and Spring Boot** for managing appointments (shifts) in a hair salon.
+The project is designed as a **first professional backend project**, following good practices such as layered architecture, DTOs, validations, security, testing, and Dockerization.
 
-The project is designed with a scalable architecture, prepared to support multiple businesses in the future.
+---
 
-🛠️ Technologies
+## 🚀 Features
 
-Java 17
+* User authentication with **JWT**
+* Appointment (shift) management
+* Business rules validation
+* Global exception handling
+* DTOs for clean API responses
+* Unit tests with JUnit & Mockito
+* Dockerized environment (Spring Boot + MySQL)
+* Environment-based configuration using `.env`
 
-Spring Boot
+---
 
-Spring Security + JWT
+## 🛠 Tech Stack
 
-Spring Data JPA
+* **Java 17**
+* **Spring Boot**
 
-MySQL
+  * Spring Web
+  * Spring Data JPA
+  * Spring Security
+* **MySQL 8**
+* **JWT (JSON Web Tokens)**
+* **JUnit 5 & Mockito**
+* **Docker & Docker Compose**
+* **Maven**
 
-Hibernate
+---
 
-JUnit 5
-
-Mockito
-
-Maven
-
-🏗️ Architecture
+## 📐 Architecture
 
 The project follows a layered architecture:
 
-controller → service → repository → database
+* **controller** – REST endpoints
+* **service** – business logic and validations
+* **repository** – data access (JPA)
+* **dto** – request/response objects
+* **mapper** – entity ↔ DTO conversions
+* **exception** – custom exceptions and global handler
+* **security** – JWT authentication and filters
 
+This separation makes the code easier to test, maintain, and scale.
 
-Key design decisions:
+---
 
-Thin controllers
+## 🧠 Business Rules
 
-Business logic handled in services
+* Appointments cannot be created:
 
-DTOs for request and response
+  * In past dates
+  * On the current day with a time earlier than the current time
+  * Outside business hours
+  * If the time slot is already taken
+* Validations are handled:
 
-Dedicated mappers
+  * At controller level (request validation)
+  * At service level (business rules)
 
-Centralized exception handling
+---
 
-Unit tests using Mockito
+## 🔐 Security
 
-🔐 Security
+* Authentication using **JWT**
+* Stateless sessions
+* Protected endpoints
+* Custom JWT filter integrated into Spring Security
 
-JWT-based authentication
+---
 
-Protected endpoints with role-based access
+## 🧪 Testing
 
-Proper HTTP status codes (401, 403, 400)
+The project includes **unit tests for the service layer** using:
 
-📦 Project Structure
-com.danidev.ShiftManager
- ├─ appointment
- │   ├─ controller
- │   ├─ dto
- │   ├─ entity
- │   ├─ mapper
- │   ├─ repository
- │   └─ service
- ├─ auth
- ├─ user
- ├─ service
- ├─ exception
- └─ config
+* JUnit 5
+* Mockito
 
-🚀 How to Run the Project
-1️⃣ Clone the repository
-git clone https://github.com/your-username/shift-manager.git
-cd shift-manager
+Covered scenarios include:
 
-2️⃣ Database configuration
+* Successful appointment creation
+* Invalid dates and times
+* Service not found
+* Conflicting appointments
+* Business rule violations
 
-Create a MySQL database:
+Builders are intentionally avoided in tests to keep them explicit and easy to read.
 
-CREATE DATABASE shift_manager;
+---
 
+## 🐳 Docker Setup
 
-Configure application.properties:
+The application is fully dockerized using **Docker Compose**.
 
-spring.datasource.url=jdbc:mysql://localhost:3306/shift_manager
-spring.datasource.username=root
-spring.datasource.password=your_password
+### Services
 
-3️⃣ Run the application
-mvn spring-boot:run
+* **app** – Spring Boot application
+* **mysql** – MySQL 8 database
 
+The application communicates with MySQL through Docker's internal network.
+
+---
+
+## ⚙️ Environment Variables
+
+Configuration is externalized using a `.env` file.
+
+Example `.env`:
+
+```
+MYSQL_DATABASE=shift_manager
+MYSQL_ROOT_PASSWORD=root
+MYSQL_USER=shift_user
+MYSQL_PASSWORD=shift_pass
+
+SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/shift_manager
+SPRING_DATASOURCE_USERNAME=shift_user
+SPRING_DATASOURCE_PASSWORD=shift_pass
+```
+
+⚠️ The `.env` file is **not committed** to version control.
+
+---
+
+## ▶️ Running the Project
+
+### Prerequisites
+
+* Docker
+* Docker Compose
+
+### Build the application
+
+```
+./mvnw clean package -DskipTests
+```
+
+### Start containers
+
+```
+docker-compose up --build
+```
 
 The API will be available at:
 
+```
 http://localhost:8080
+```
 
-🧪 Run Tests
-mvn test
+---
 
+## 📄 API Usage
 
-The tests focus on the service layer, using JUnit 5 and Mockito to validate business rules.
+* Register a user
+* Login to obtain a JWT
+* Use the JWT in the `Authorization` header:
 
-📡 Main Endpoints (examples)
-🔑 Authentication
+```
+Authorization: Bearer <token>
+```
 
-POST /auth/register
+* Access protected endpoints
 
-POST /auth/login
+---
 
-📅 Appointments
+## 🌍 Profiles
 
-POST /appointments
+* **local** – default profile
+* **docker** – used when running inside Docker
 
-GET /appointments/daily?date=2026-01-10
+The active profile is controlled with:
 
-📌 Project Status
+```
+SPRING_PROFILES_ACTIVE=docker
+```
 
-✔ JWT Authentication
-✔ Appointment CRUD
-✔ Business validations
-✔ DTOs and Mappers
-✔ Unit tests
-✔ Ready for future multi-business support
+---
 
-🧠 Future Improvements
+## 📌 Future Improvements
 
-Multi-business support
+* Controller integration tests (MockMvc)
+* Swagger / OpenAPI documentation
+* Pagination and filtering
+* Multi-business (multi-tenant) support
+* CI pipeline
 
-Advanced roles (admin / employee)
+---
 
-Integration tests
+## 👨‍💻 Author
 
-Docker support
+Developed as a learning and portfolio project to demonstrate backend skills with Java and Spring Boot.
 
-Frontend application
+---
 
-👨‍💻 Author
+## 📄 License
 
-Dani Dev
-Personal project focused on practicing backend development with Java and Spring Boot.
+This project is for educational purposes.
+
