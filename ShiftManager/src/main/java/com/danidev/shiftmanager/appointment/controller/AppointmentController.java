@@ -29,13 +29,7 @@ public class AppointmentController {
     public ResponseEntity<Appointment> create(
             @Valid @RequestBody AppointmentRequest request) {
 
-        Appointment appointment = appointmentService.create(
-                request.date,
-                request.startTime,
-                request.serviceId,
-                request.clientName,
-                request.clientEmail
-        );
+        Appointment appointment = appointmentService.create(request);
 
         return ResponseEntity.ok(appointment);
     }

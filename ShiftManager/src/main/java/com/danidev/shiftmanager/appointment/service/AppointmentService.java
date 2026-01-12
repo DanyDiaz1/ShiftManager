@@ -1,5 +1,6 @@
 package com.danidev.shiftmanager.appointment.service;
 
+import com.danidev.shiftmanager.appointment.dto.AppointmentRequest;
 import com.danidev.shiftmanager.appointment.entity.Appointment;
 import com.danidev.shiftmanager.appointment.repository.AppointmentRepository;
 import com.danidev.shiftmanager.exception.BusinessException;
@@ -26,27 +27,26 @@ public class AppointmentService {
         this.serviceRepository = serviceRepository;
     }
 
-    public Appointment create(LocalDate date,
-                              LocalTime startTime,
-                              Long serviceId,
-                              String clientName,
-                              String clientEmail) {
+    public Appointment create(AppointmentRequest request) {
 
-        if (date.isBefore(LocalDate.now())) {
-            throw new BusinessException("Cannot create appointments in the past");
-        }
+        validateNotInPast(request.getDate(), request.getStartTime());
 
-        ServiceEntity service = serviceRepository.findById(serviceId)
+        ServiceEntity service = serviceRepository.findById(request.getServiceId())
                 .orElseThrow(() -> new BusinessException("Service not found"));
 
-        LocalTime endTime = startTime.plusMinutes(service.getDurationMinutes());
+        LocalTime endTime = request.getStartTime()
+                .plusMinutes(service.getDurationMinutes());
 
-        if (startTime.isBefore(OPEN_TIME) || endTime.isAfter(CLOSE_TIME)) {
+        if (request.getStartTime().isBefore(OPEN_TIME) || endTime.isAfter(CLOSE_TIME)) {
             throw new BusinessException("Outside business hours");
         }
 
         boolean hasConflicts = !repository
-                .findConflictingAppointments(date, startTime, endTime)
+                .findConflictingAppointments(
+                        request.getDate(),
+                        request.getStartTime(),
+                        endTime
+                )
                 .isEmpty();
 
         if (hasConflicts) {
@@ -54,14 +54,28 @@ public class AppointmentService {
         }
 
         Appointment appointment = new Appointment();
-        appointment.setDate(date);
-        appointment.setStartTime(startTime);
+        appointment.setDate(request.getDate());
+        appointment.setStartTime(request.getStartTime());
         appointment.setEndTime(endTime);
         appointment.setService(service);
-        appointment.setClientName(clientName);
-        appointment.setClientEmail(clientEmail);
+        appointment.setClientName(request.getClientName());
+        appointment.setClientEmail(request.getClientEmail());
 
         return repository.save(appointment);
+    }
+
+    private void validateNotInPast(LocalDate date, LocalTime startTime) {
+
+        LocalDate today = LocalDate.now();
+        LocalTime now = LocalTime.now();
+
+        if (date.isBefore(today)) {
+            throw new BusinessException("Cannot create appointments in the past");
+        }
+        System.out.printf("hola");
+        if (date.isEqual(today) && startTime.isBefore(now)) {
+            throw new BusinessException("Cannot create an appointment before the current time");
+        }
     }
 
     public List<Appointment> getDailyAgenda(LocalDate date) {

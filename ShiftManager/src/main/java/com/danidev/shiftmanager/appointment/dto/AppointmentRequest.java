@@ -1,9 +1,12 @@
 package com.danidev.shiftmanager.appointment.dto;
 
 import jakarta.validation.constraints.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.*;
 
+@Getter @Setter
 public class AppointmentRequest {
 
     @NotNull
