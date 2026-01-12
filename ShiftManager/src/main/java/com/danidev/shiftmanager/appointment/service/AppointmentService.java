@@ -8,6 +8,8 @@ import com.danidev.shiftmanager.service.repository.ServiceRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class AppointmentService {
@@ -60,5 +62,45 @@ public class AppointmentService {
         appointment.setClientEmail(clientEmail);
 
         return repository.save(appointment);
+    }
+
+    public List<Appointment> getDailyAgenda(LocalDate date) {
+        return repository.findByDateOrderByStartTimeAsc(date);
+    }
+
+    public List<LocalTime> getAvailableSlots(
+            LocalDate date,
+            Long serviceId) {
+
+        ServiceEntity service = serviceRepository.findById(serviceId)
+                .orElseThrow(() -> new BusinessException("Service not found"));
+
+        int duration = service.getDurationMinutes();
+
+        List<Appointment> appointments =
+                repository.findByDateOrderByStartTimeAsc(date);
+
+        List<LocalTime> availableSlots = new ArrayList<>();
+
+        LocalTime time = OPEN_TIME;
+
+        while (time.plusMinutes(duration).isBefore(CLOSE_TIME.plusSeconds(1))) {
+
+            LocalTime slotEnd = time.plusMinutes(duration);
+
+            LocalTime finalTime = time;
+            boolean overlaps = appointments.stream().anyMatch(a ->
+                    finalTime.isBefore(a.getEndTime()) &&
+                            slotEnd.isAfter(a.getStartTime())
+            );
+
+            if (!overlaps) {
+                availableSlots.add(time);
+            }
+
+            time = time.plusMinutes(15); // intervalo configurable
+        }
+
+        return availableSlots;
     }
 }
